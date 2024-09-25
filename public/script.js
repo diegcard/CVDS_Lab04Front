@@ -9,19 +9,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	function renderTasks() {
 		taskList.innerHTML = "";
-		tasks.forEach((task) => {
+		let task;
+		for (task of tasks) {
 			const row = document.createElement("tr");
 			row.innerHTML = `
-                <td>${task.id}</td>
-                <td>${task.name}</td>
-                <td>${task.date}</td>
-                <td>
-                    <button class="complete-btn">✓</button>
-                    <button class="delete-btn">✗</button>
-                </td>
-            `;
+				<td>${task.id}</td>
+				<td>${task.name}</td>
+				<td>${task.date}</td>
+				<td>
+					<button class="complete-btn">✓</button>
+					<button class="delete-btn">✗</button>
+				</td>
+			`;
 			taskList.appendChild(row);
-		});
+		}
 	}
 
 	createBtn.addEventListener("click", () => {
@@ -38,7 +39,20 @@ document.addEventListener("DOMContentLoaded", () => {
 			name: taskName,
 			date: finalDate,
 		};
+
+		fetch("http://localhost:8080", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(newTask),
+		});
 		tasks.push(newTask);
+
+		/**
+		 * const tasks = await fetch("http://localhost:8080/tasks")
+		 */
+
 		renderTasks();
 		createView.style.display = "none";
 		mainView.style.display = "block";
