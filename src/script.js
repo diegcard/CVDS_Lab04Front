@@ -5,9 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	const createForm = document.getElementById("create-form");
 	const taskList = document.getElementById("task-list");
 
-	const tasks = [
-		{ id: 1, name: "Task 1", description: "Description 1", date: "2021-10-10" },
-	];
+	const tasks = [{ id: 1, name: "Task 1", description: "Description 1" }];
 
 	function renderTasks() {
 		taskList.innerHTML = "";
@@ -18,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				<td>${task.id}</td>
 				<td>${task.name}</td>
 				<td>${task.description}</td>
-				<td>${task.date}</td>
 				<td>
 					<button class="complete-btn">✓</button>
 					<button class="delete-btn">✗</button>
@@ -37,12 +34,10 @@ document.addEventListener("DOMContentLoaded", () => {
 		e.preventDefault();
 		const taskName = document.getElementById("task-name").value;
 		const Description = document.getElementById("description").value;
-		const finalDate = document.getElementById("final-date").value;
 		const newTask = {
 			id: tasks.length + 1,
 			name: taskName,
 			description: Description,
-			date: finalDate,
 		};
 
 		/* 
