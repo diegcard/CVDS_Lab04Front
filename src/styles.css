@@ -72,9 +72,17 @@ button:hover {
 	margin-top: 20px;
 }
 
-form {
+
+#create-form {
 	display: flex;
 	flex-direction: column;
+	margin: 0 auto;
+	align-items: center;
+}
+
+form {
+	display: flex;
+	flex-direction: colum;
 	margin: 0 auto;
 	align-items: center;
 }
@@ -93,4 +101,20 @@ textarea {
 	border-radius: 5px;
 	border: 1px solid #2d2d2d;
 	width: 50%;
+}
+
+
+.horizontal-form {
+	display: inline-block;
+	margin: 10px;
+}
+
+.horizontal-form .complete-btn,
+.horizontal-form .delete-btn {
+	margin-left: 5px;
+}
+
+.limited-width {
+    max-width: 100px;
+	text-align: center ;
 }
