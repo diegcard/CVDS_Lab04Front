@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	const createForm = document.getElementById("create-form");
 	const taskList = document.getElementById("task-list");
 
-	const tasks = [{ id: 1, name: "Task 1", description: "Description 1" }];
+	const tasks = [];
 
 	function renderTasks() {
 		taskList.innerHTML = "";
@@ -14,15 +14,34 @@ document.addEventListener("DOMContentLoaded", () => {
 			const row = document.createElement("tr");
 			row.innerHTML = `
 				<td>${task.id}</td>
-				<td>${task.name}</td>
-				<td>${task.description}</td>
+				<td>${task.nameTask}</td>
+				<td>${task.descriptionTask}</td>
 				<td>
 					<button class="complete-btn">✓</button>
 					<button class="delete-btn">✗</button>
 				</td>
-			`;
+				`;
 			taskList.appendChild(row);
 		}
+	}
+
+	async function getTasks() {
+		try {
+			const task = await fetch("http://localhost:8080/api/tasks/all");
+			const ts = await task.json();
+			let tas;
+			for (tas of ts) {
+				tasks.push(tas);
+			}
+			renderTasks();
+			console.log("ts", tasks);
+		} catch (error) {
+			console.log("Error fetching tasks", error);
+		}
+	}
+
+	function completeTask(id) {
+		console.log("complete", id);
 	}
 
 	createBtn.addEventListener("click", () => {
@@ -36,33 +55,23 @@ document.addEventListener("DOMContentLoaded", () => {
 		const Description = document.getElementById("description").value;
 		const newTask = {
 			id: tasks.length + 1,
-			name: taskName,
-			description: Description,
+			nameTask: taskName,
+			descriptionTask: Description,
 		};
 
-		/* 
-		fetch("http://localhost:8080/api/tasks/all", {
+		fetch("http://localhost:8080/api/tasks/create", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(newTask),
-		}); */
-
-		const Tasks = await fetch("http://localhost:8080/api/tasks/all");
-		const ts = await Tasks.json();
-		console.log(ts);
-		tasks.push(newTask);
-
-		/**
-		 * const tasks = await fetch("http://localhost:8080/tasks")
-		 */
+		});
 
 		renderTasks();
 		createView.style.display = "none";
 		mainView.style.display = "block";
 		createForm.reset();
 	});
-
+	getTasks();
 	renderTasks();
 });
