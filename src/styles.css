@@ -75,9 +75,22 @@ button:hover {
 form {
 	display: flex;
 	flex-direction: column;
+	margin: 0 auto;
+	align-items: center;
 }
 
 input {
 	margin-bottom: 10px;
 	padding: 5px;
+	border-radius: 5px;
+	border: 1px solid #2d2d2d;
+	width: 50%;
+}
+
+textarea {
+	margin-bottom: 10px;
+	padding: 5px;
+	border-radius: 5px;
+	border: 1px solid #2d2d2d;
+	width: 50%;
 }
