@@ -94,15 +94,23 @@ function renderTasks() {
 		const row = document.createElement("tr");
 
 		row.innerHTML = `
-			<td>${task.id}</td>
 			<td>${task.nameTask}</td>
 			<td class="limited-width">${task.descriptionTask}</td>
+			<td>${task.isCompleted ? "Completado" : "No Completado"}</td>
 			<td class="limited-width">
-			<form onClick="completeTask('${task.id}')" class="horizontal-form" action="http://localhost:8080/api/tasks/done/${task.id}">
+			<form onClick="completeTask('${
+				task.id
+			}')" class="horizontal-form" action="http://localhost:8080/api/tasks/done/${
+				task.id
+			}">
 			<button class="complete-btn" type="button">✓</button>
 			</form>
 			|
-			<form onClick="deleteTask('${task.id}')" class="horizontal-form" action="http://localhost:8080/api/tasks/delete/${task.id}">
+			<form onClick="deleteTask('${
+				task.id
+			}')" class="horizontal-form" action="http://localhost:8080/api/tasks/delete/${
+				task.id
+			}">
 			<button type="button" class="delete-btn">✗</button>
 			</form>
 			</td>
