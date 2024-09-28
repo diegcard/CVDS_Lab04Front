@@ -1,0 +1,120 @@
+body {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 20px;
+	background-color: #f0f0f0;
+}
+
+#app {
+	margin: 0 auto;
+	background-color: white;
+	padding: 20px;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);	
+}
+
+h1 {
+	background-color: #5f9ea0;
+	color: white;
+	padding: 10px;
+	text-align: center;
+	border-radius: 10px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	border-radius: 10px;
+}
+
+th {
+	height: 20px;
+	padding: 8px;
+	text-align: center;
+	background-color: #5f9ea0;
+	color: white;
+}
+
+th:first-child {
+	border-radius: 10px 0 0 10px;
+}
+
+th:last-child {
+	border-radius: 0 10px 10px 0;
+}
+
+tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+td{
+	padding: 8px;
+	text-align: center;
+}
+
+
+button {
+	background-color: #5f9ea0;
+	color: white;
+	border: none;
+	padding: 5px 10px;
+	cursor: pointer;
+	margin: 5px;
+	border-radius: 15px;
+}
+
+button:hover {
+	background-color: #4f8e90;
+}
+
+.pagination {
+	text-align: center;
+	margin-top: 20px;
+}
+
+
+#create-form {
+	display: flex;
+	flex-direction: column;
+	margin: 0 auto;
+	align-items: center;
+}
+
+form {
+	display: flex;
+	flex-direction: colum;
+	margin: 0 auto;
+	align-items: center;
+}
+
+input {
+	margin-bottom: 10px;
+	padding: 5px;
+	border-radius: 5px;
+	border: 1px solid #2d2d2d;
+	width: 50%;
+}
+
+textarea {
+	margin-bottom: 10px;
+	padding: 5px;
+	border-radius: 5px;
+	border: 1px solid #2d2d2d;
+	width: 50%;
+}
+
+
+.horizontal-form {
+	display: inline-block;
+	margin: 10px;
+}
+
+.horizontal-form .complete-btn,
+.horizontal-form .delete-btn {
+	margin-left: 5px;
+}
+
+.limited-width {
+    max-width: 100px;
+	text-align: center ;
+}
