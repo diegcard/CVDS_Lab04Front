@@ -64,7 +64,7 @@ async function deleteTask(id) {
  */
 async function completeTask(id) {
 	const response = await fetch(
-		`${"http://localhost:8080/api/tasks/done"}/${id}`,
+		`${"http://localhost:8080/api/tasks/changeIsCompleted"}/${id}`,
 		{
 			method: "PUT",
 			headers: {
@@ -100,7 +100,7 @@ function renderTasks() {
 			<td class="limited-width">
 			<form onClick="completeTask('${
 				task.id
-			}')" class="horizontal-form" action="http://localhost:8080/api/tasks/done/${
+			}')" class="horizontal-form" action="http://localhost:8080/api/tasks/changeIsCompleted/${
 				task.id
 			}">
 			<button class="complete-btn" type="button">✓</button>
