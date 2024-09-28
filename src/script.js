@@ -47,7 +47,7 @@ async function completeTask(id) {
 			},
 		},
 	);
-	renderTasks();
+	getTasks();
 }
 
 function renderTasks() {
@@ -77,6 +77,7 @@ function renderTasks() {
 }
 
 async function getTasks() {
+	tasks = [];
 	try {
 		const task = await fetch("http://localhost:8080/api/tasks/all");
 		const ts = await task.json();
