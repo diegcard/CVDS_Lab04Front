@@ -14,6 +14,7 @@ Este repositorio contiene una aplicación web sencilla de lista de tareas desarr
 # 1. MockUp del proyecto
 
 Se realizó un mockup del proyecto en la herramienta Figma, donde se planteó la interfaz gráfica de la aplicación. En el mockup se pueden observar las diferentes pantallas de la aplicación, así como las funcionalidades que se implementarán en cada una de ellas.
+Hay que tener en cuenta que el diseño final puede variar en función de las necesidades del proyecto.
 
 https://www.figma.com/design/kkFWpGQRaCsQIJFRXwe13S/Untitled?node-id=0-1&t=pg2DZCoD0XhF4Tjb-1 
 
