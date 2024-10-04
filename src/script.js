@@ -1,33 +1,20 @@
 const mainView = document.getElementById("main-view");
 const createView = document.getElementById("create-view");
 const createBtn = document.getElementById("create-btn");
-const createForm = document.getElementById("create-form");
 const taskList = document.getElementById("task-list");
+const nextBtn = document.getElementById("next-btn");
+const prevBtn = document.getElementById("prev-btn");
+const pageInfo = document.getElementById("page-info");
+const searchBar = document.getElementById("search");
+const deletealltasks = document.getElementById("delete-all-tasks");
+const createAleatoryTasks = document.getElementById("create-aleatory-tasks");
 
 const generatedIds = new Set();
+const tasksPerPage = 7;
 
+let currentPage = 1;
 let tasks = [];
-
-/**
- * Generates a unique 5-character alphanumeric ID.
- * The ID is composed of uppercase letters, lowercase letters, and digits.
- * Ensures that the generated ID is unique by checking against a set of previously generated IDs.
- *
- * @returns {string} A unique 5-character alphanumeric ID.
- */
-function generateId() {
-	const characters =
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	let id;
-	do {
-		id = "";
-		for (let i = 0; i < 5; i++) {
-			id += characters.charAt(Math.floor(Math.random() * characters.length));
-		}
-	} while (generatedIds.has(id));
-	generatedIds.add(id);
-	return id;
-}
+let filteredTasks = [];
 
 /**
  * Deletes a task by its ID.
@@ -52,6 +39,7 @@ async function deleteTask(id) {
 		},
 	);
 	tasks = tasks.filter((task) => String(task.id) !== String(id));
+	filteredTasks = tasks;
 	renderTasks();
 	generatedIds.delete(id);
 }
@@ -66,7 +54,7 @@ async function completeTask(id) {
 	const response = await fetch(
 		`${"http://localhost:8080/api/tasks/changeIsCompleted"}/${id}`,
 		{
-			method: "PUT",
+			method: "PATCH",
 			headers: {
 				"Content-Type": "application/json",
 			},
@@ -86,52 +74,57 @@ async function completeTask(id) {
  * renderTasks();
  */
 function renderTasks() {
-	console.log("Rendering tasks: ", tasks);
+	console.log("Rendering tasks: ", filteredTasks);
 
 	taskList.innerHTML = "";
-	let task;
-	for (task of tasks) {
-		const row = document.createElement("tr");
+	const start = (currentPage - 1) * tasksPerPage;
+	const end = start + tasksPerPage;
+	const paginatedTasks = filteredTasks.slice(start, end);
 
+	let task;
+	for (task of paginatedTasks) {
+		const row = document.createElement("tr");
+		const buttondone = task.isCompleted ? "done" : "undone";
 		row.innerHTML = `
-			<td>${task.nameTask}</td>
+			<td class="limited-width">${task.nameTask}</td>
 			<td class="limited-width">${task.descriptionTask}</td>
-			<td>${task.isCompleted ? "Completado" : "No Completado"}</td>
+			<td class="limited-width">${task.estimatedTime}</td>
+            <td class="limited-width">${task.difficultyLevel}</td>
+			<td class="limited-width">${task.priority}</td>
 			<td class="limited-width">
-			<form onClick="completeTask('${
-				task.id
-			}')" class="horizontal-form" action="http://localhost:8080/api/tasks/changeIsCompleted/${
-				task.id
-			}">
-			<button class="complete-btn" type="button">✓</button>
-			</form>
-			|
-			<form onClick="deleteTask('${
-				task.id
-			}')" class="horizontal-form" action="http://localhost:8080/api/tasks/delete/${
-				task.id
-			}">
-			<button type="button" class="delete-btn">✗</button>
-			</form>
+			<button class="complete-btn ${
+				task.isCompleted ? "done-button" : ""
+			}" type="button" onclick="completeTask('${task.id}')">${buttondone}</button>
+            |
+            <button type="button" class="delete-btn" onclick="deleteTask('${
+							task.id
+						}')">Delete</button>
+            </td>
 			</td>
 		`;
 		taskList.appendChild(row);
 	}
+
+	const totalPages = Math.ceil(tasks.length / tasksPerPage);
+	pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+	prevBtn.disabled = currentPage === 1;
+	nextBtn.disabled = currentPage >= totalPages;
 }
+
 
 /**
  * Fetches tasks from the server and renders them.
- *
- * This function makes an asynchronous request to the server to retrieve all tasks.
- * If the request is successful, it populates the `tasks` array with the fetched tasks
- * and calls the `renderTasks` function to display them. If an error occurs during the
+*
+* This function makes an asynchronous request to the server to retrieve all tasks.
+* If the request is successful, it populates the `tasks` array with the fetched tasks
+* and calls the `renderTasks` function to display them. If an error occurs during the
  * fetch operation, it logs an error message to the console.
- *
- *
- * @async
- * @function getTasks
+*
+*
+* @async
+* @function getTasks
  * @returns {Promise<void>} A promise that resolves when the tasks have been fetched and rendered.
- */
+*/
 async function getTasks() {
 	tasks = [];
 	try {
@@ -141,10 +134,26 @@ async function getTasks() {
 		for (tas of ts) {
 			tasks.push(tas);
 		}
+		filteredTasks = tasks;
 		renderTasks();
 	} catch (error) {
 		console.log("Error fetching tasks", error);
 	}
+}
+
+function searchTasks() {
+	const query = searchBar.value.toLowerCase();
+	filteredTasks = tasks.filter((task) => {
+		return (
+			task.nameTask.toLowerCase().includes(query) ||
+			task.descriptionTask.toLowerCase().includes(query) ||
+			task.estimatedTime.toLowerCase().includes(query) ||
+			task.difficultyLevel.toLowerCase().includes(query) ||
+			task.priority.toString().includes(query)
+		);
+	});
+	currentPage = 1;
+	renderTasks();
 }
 
 createBtn.addEventListener("click", () => {
@@ -152,30 +161,22 @@ createBtn.addEventListener("click", () => {
 	createView.style.display = "block";
 });
 
-createForm.addEventListener("submit", async (e) => {
-	e.preventDefault();
-	const taskName = document.getElementById("task-name").value;
-	const Description = document.getElementById("description").value;
-	const newTask = {
-		id: generateId(),
-		nameTask: taskName,
-		descriptionTask: Description,
-	};
 
-	fetch("http://localhost:8080/api/tasks/create", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(newTask),
-	});
+searchBar.addEventListener("input", searchTasks);
 
-	createView.style.display = "none";
-	mainView.style.display = "block";
-	createForm.reset();
-	tasks.push(newTask);
-	renderTasks();
+prevBtn.addEventListener("click", () => {
+	if (currentPage > 1) {
+		currentPage -= 1;
+		renderTasks();
+	}
 });
 
+nextBtn.addEventListener("click", () => {
+	const totalPages = Math.ceil(tasks.length / tasksPerPage);
+	if (currentPage < totalPages) {
+		currentPage++;
+		renderTasks();
+	}
+});
 getTasks();
 renderTasks();
