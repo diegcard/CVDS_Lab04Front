@@ -4,33 +4,46 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CVDS TO-DO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div id="app">
       <h1>CVDS TO-DO</h1>
       <div id="main-view">
-        <button id="create-btn">Create</button>
+        <div id="controls">
+          <button id="create-btn" onclick="location.href='routes/create-task/index.html'">
+            Create
+          </button>
+          <button id="Analitycs" onclick="location.href='routes/analitycs/index.html'">
+            Analytics
+          </button>
+          <button id="create-aleatory-task">create aleatory Task</button>
+          <button id="delete-all-tasks">delete all tasks</button>
+          <input type="text" id="search" placeholder="Search task..." />
+        </div>
         <table>
           <thead>
             <tr>
               <th>Task Name</th>
               <th>Description</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th>stimated time</th>
+              <th>dificulty</th>
+              <th>priority</th>
+              <th>acctions</th>
             </tr>
           </thead>
           <tbody id="task-list"></tbody>
         </table>
-      </div>
-      <div id="create-view" style="display: none">
-        <form id="create-form">
-          <label for="task-name">Task Name:</label>
-          <input type="text" id="task-name" required />
-          <label for="description">Description:</label>
-          <textarea id="description" required></textarea>
-          <button type="submit">Create</button>
-        </form>
+      <div id="pagination">
+        <button id="prev-btn" disabled">Previous</button>
+        <span id="page-info"></span>
+        <button id="next-btn">Next</button>
       </div>
     </div>
     <script src="script.js"></script>

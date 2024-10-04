@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CVDS TODO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="header">
+      <h1>CVDS TODO</h1>
+    <div class="container">
+      <div class="sidebar">
+        <h2>Chart Types</h2>
+        <ul>
+          <li>
+            <button onclick="changeChart('Histogram')">
+              Difficulty Histogram
+            </button>
+          </li>
+          <li><button onclick="changeChart('line')">Line Chart</button></li>
+          <li><button onclick="changeChart('pie')">Pie Chart</button></li>
+          <li>
+            <button onclick="changeChart('scatter')">Scatter Plot</button>
+          </li>
+        </ul>
+      </div>
+      <div class="main-content">
+        <div id="chart-container">Select a chart type from the sidebar</div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
