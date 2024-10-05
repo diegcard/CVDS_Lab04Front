@@ -1,3 +1,4 @@
+
 const mainView = document.getElementById("main-view");
 const createView = document.getElementById("create-view");
 const createBtn = document.getElementById("create-btn");
@@ -7,9 +8,8 @@ const prevBtn = document.getElementById("prev-btn");
 const pageInfo = document.getElementById("page-info");
 const searchBar = document.getElementById("search");
 const deletealltasks = document.getElementById("delete-all-tasks");
-const createAleatoryTasks = document.getElementById("create-aleatory-tasks");
+const createaleatorytasks = document.getElementById("create-aleatory-task");
 
-const generatedIds = new Set();
 const tasksPerPage = 7;
 
 let currentPage = 1;
@@ -38,10 +38,7 @@ async function deleteTask(id) {
 			},
 		},
 	);
-	tasks = tasks.filter((task) => String(task.id) !== String(id));
-	filteredTasks = tasks;
-	renderTasks();
-	generatedIds.delete(id);
+	getTasks();
 }
 
 /**
@@ -92,13 +89,12 @@ function renderTasks() {
             <td class="limited-width">${task.difficultyLevel}</td>
 			<td class="limited-width">${task.priority}</td>
 			<td class="limited-width">
-			<button class="complete-btn ${
-				task.isCompleted ? "done-button" : ""
-			}" type="button" onclick="completeTask('${task.id}')">${buttondone}</button>
+			<button class="complete-btn ${task.isCompleted ? "done-button" : ""}"
+			type="button" data-task-id="${task.id}">${buttondone}</button>
             |
-            <button type="button" class="delete-btn" onclick="deleteTask('${
-							task.id
-						}')">Delete</button>
+            <button type="button" class="delete-btn" data-task-id="${task.id}">Delete</button>
+			|
+			<button type="button" class="update-btn" data-task-id="${task.id}">Update</button>
             </td>
 			</td>
 		`;
@@ -109,6 +105,9 @@ function renderTasks() {
 	pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
 	prevBtn.disabled = currentPage === 1;
 	nextBtn.disabled = currentPage >= totalPages;
+	updateToTask();
+	completeToTask();
+	deleteToTask();
 }
 
 
@@ -136,10 +135,46 @@ async function getTasks() {
 		}
 		filteredTasks = tasks;
 		renderTasks();
+
 	} catch (error) {
 		console.log("Error fetching tasks", error);
 	}
 }
+
+function deleteToTask() {
+	const deleteButtons = document.getElementsByClassName("delete-btn");
+	for (const button of deleteButtons) {
+		button.addEventListener("click", (event) => {
+			const taskId = event.target.getAttribute("data-task-id");
+			deleteTask(taskId);
+		});
+	}
+}
+
+
+function completeToTask() {
+	const completeButtons = document.getElementsByClassName("complete-btn");
+	for (const button of completeButtons) {
+		button.addEventListener("click", (event) => {
+			const taskId = event.target.getAttribute("data-task-id");
+			completeTask(taskId);
+		});
+	}
+}
+
+
+function updateToTask() {
+	const updateButtons = document.getElementsByClassName("update-btn");
+	for (const button of updateButtons) {
+		button.addEventListener("click", (event) => {
+			const taskId = event.target.getAttribute("data-task-id");
+			const taskToUpdate = tasks.find((task) => task.id === taskId);
+			localStorage.setItem("taskToUpdate", JSON.stringify(taskToUpdate));
+			window.location.href = "/routes/update/index.html";
+		});
+	}
+}
+
 
 function searchTasks() {
 	const query = searchBar.value.toLowerCase();
@@ -156,11 +191,30 @@ function searchTasks() {
 	renderTasks();
 }
 
+async function deleteAllTasks() {
+	const response = await fetch("http://localhost:8080/api/tasks/deleteAll", {
+		method: "DELETE",
+	});
+	getTasks();
+}
+
+
+async function createAleatoryTasks() {
+	const response = await fetch("http://localhost:8080/api/tasks/generateRandomTasks", {
+		method: "POST"
+	});
+	getTasks();
+}
+
 createBtn.addEventListener("click", () => {
 	mainView.style.display = "none";
 	createView.style.display = "block";
 });
 
+
+deletealltasks.addEventListener("click", deleteAllTasks);
+
+createaleatorytasks.addEventListener("click", createAleatoryTasks);
 
 searchBar.addEventListener("input", searchTasks);
 

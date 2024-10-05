@@ -1,5 +1,3 @@
-const generatedIds = new Set();
-
 const createForm = document.getElementById("create-form");
 
 /**
@@ -15,26 +13,6 @@ function getCurrentDate() {
 	return `${year}-${month}-${day}`;
 }
 
-/**
- * Generates a unique 5-character alphanumeric ID.
- * The ID is composed of uppercase letters, lowercase letters, and digits.
- * Ensures that the generated ID is unique by checking against a set of previously generated IDs.
- *
- * @returns {string} A unique 5-character alphanumeric ID.
- */
-function generateId() {
-	const characters =
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	let id;
-	do {
-		id = "";
-		for (let i = 0; i < 5; i++) {
-			id += characters.charAt(Math.floor(Math.random() * characters.length));
-		}
-	} while (generatedIds.has(id));
-	generatedIds.add(id);
-	return id;
-}
 
 /**
  * Converts a date string in the format "dd/MM/yyyy" to "yyyy-MM-dd'T'HH:mm:ss.SSS".
@@ -73,7 +51,6 @@ createForm.addEventListener("submit", async (e) => {
 
 	errorMessage.style.display = "none";
 	const newTask = {
-		id: generateId(),
 		nameTask: taskName,
 		descriptionTask: Description,
 		difficultyLevel: Difficulty,
@@ -94,7 +71,7 @@ createForm.addEventListener("submit", async (e) => {
 	setTimeout(() => {
 		successMessage.style.display = "none";
 		window.location.href = "../../index.html";
-	}, 1000);
+	});
 
 	createForm.reset();
 });
