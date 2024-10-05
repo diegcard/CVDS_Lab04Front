@@ -75,7 +75,7 @@ updateForm.addEventListener("submit", async (e) => {
     
     
     const response = await fetch(
-        `http://localhost:8080/api/tasks/update`,
+        `https://cvdstodo-gsesacf6egbuhkh3.centralus-01.azurewebsites.net/api/tasks/update`,
         {
         method: "PATCH",
         headers: {

@@ -26,6 +26,26 @@ function convertToISOFormat(dateStr) {
 	return date;
 }
 
+function generateId() {
+    let id = "";
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    
+    do {
+        id = "";
+        for (let i = 0; i < 5; i++) {
+            id += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+    } while (existsById(id));
+    
+    return id;
+}
+
+
+function existsById(id) {
+    const existingIds = [];
+    return existingIds.includes(id);
+}
+
 createForm.addEventListener("submit", async (e) => {
 	e.preventDefault();
 	const taskName = document.getElementById("task-name").value;
@@ -51,27 +71,29 @@ createForm.addEventListener("submit", async (e) => {
 
 	errorMessage.style.display = "none";
 	const newTask = {
+		id: generateId(),
 		nameTask: taskName,
 		descriptionTask: Description,
 		difficultyLevel: Difficulty,
 		priority: Priority,
 		estimatedTime: EstimatedTime,
 	};
-	console.log(newTask);
-
-	fetch("http://localhost:8080/api/tasks/create", {
+	
+	fetch("https://cvdstodo-gsesacf6egbuhkh3.centralus-01.azurewebsites.net/api/tasks/create", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
 		},
 		body: JSON.stringify(newTask),
 	});
+	console.log(JSON.stringify(newTask));
 	const successMessage = document.getElementById("success-msg");
 	successMessage.style.display = "block";
 	setTimeout(() => {
 		successMessage.style.display = "none";
 		window.location.href = "../../index.html";
-	});
+
+	}, 1000);
 
 	createForm.reset();
 });

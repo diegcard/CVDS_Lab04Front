@@ -175,7 +175,7 @@ function drawTotalTimeByCompletedTasks() {
 async function getTasks() {
     tasks = [];
     try {
-        const response = await fetch("http://localhost:8080/api/tasks/all");
+        const response = await fetch("https://cvdstodo-gsesacf6egbuhkh3.centralus-01.azurewebsites.net/api/tasks/all");
         tasks = await response.json();
         console.log("Tasks loaded:", tasks);
     } catch (error) {

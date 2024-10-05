@@ -30,7 +30,7 @@ let filteredTasks = [];
  */
 async function deleteTask(id) {
 	const response = await fetch(
-		`${"http://localhost:8080/api/tasks/delete"}/${id}`,
+		`${"https://cvdstodo-gsesacf6egbuhkh3.centralus-01.azurewebsites.net/api/tasks/delete"}/${id}`,
 		{
 			method: "DELETE",
 			headers: {
@@ -49,7 +49,7 @@ async function deleteTask(id) {
  */
 async function completeTask(id) {
 	const response = await fetch(
-		`${"http://localhost:8080/api/tasks/changeIsCompleted"}/${id}`,
+		`${"https://cvdstodo-gsesacf6egbuhkh3.centralus-01.azurewebsites.net/api/tasks/changeIsCompleted"}/${id}`,
 		{
 			method: "PATCH",
 			headers: {
@@ -127,7 +127,7 @@ function renderTasks() {
 async function getTasks() {
 	tasks = [];
 	try {
-		const task = await fetch("http://localhost:8080/api/tasks/all");
+		const task = await fetch("https://cvdstodo-gsesacf6egbuhkh3.centralus-01.azurewebsites.net/api/tasks/all");
 		const ts = await task.json();
 		let tas;
 		for (tas of ts) {
@@ -192,7 +192,7 @@ function searchTasks() {
 }
 
 async function deleteAllTasks() {
-	const response = await fetch("http://localhost:8080/api/tasks/deleteAll", {
+	const response = await fetch("https://cvdstodo-gsesacf6egbuhkh3.centralus-01.azurewebsites.net/api/tasks/deleteAll", {
 		method: "DELETE",
 	});
 	getTasks();
@@ -200,7 +200,7 @@ async function deleteAllTasks() {
 
 
 async function createAleatoryTasks() {
-	const response = await fetch("http://localhost:8080/api/tasks/generateRandomTasks", {
+	const response = await fetch("https://cvdstodo-gsesacf6egbuhkh3.centralus-01.azurewebsites.net/api/tasks/generateRandomTasks", {
 		method: "POST"
 	});
 	getTasks();
