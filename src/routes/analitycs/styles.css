@@ -75,3 +75,8 @@ button:hover {
     font-size: 18px;
     color: #666;
 }
+
+#go-back-btn{
+    margin-top: 75px;
+	background-color: hsl(335, 90%, 51%);
+}

@@ -178,8 +178,28 @@ gap: 20px; /* Espacio entre los selectores */
 	background-color: hsl(345, 90%, 51%);
 }
 
+
+.complete-btn {
+	width: 70px;
+	height: 40px;
+	align-items: center;
+	justify-content: center;	
+}
+
 .delete-btn {
+	width: 70px;
+	height: 40px;
+	align-items: center;
+	justify-content: center;	
 	background-color: hsl(345, 90%, 51%);
+}
+
+.update-btn {
+	width: 70px;
+	height: 40px;
+	align-items: center;
+	justify-content: center;	
+	background-color: hsl(286, 88%, 39%);
 }
 
 .pagination {
