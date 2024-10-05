@@ -17,9 +17,9 @@ Se realizó un mockup del proyecto en la herramienta Figma, donde se planteó la
 
 https://www.figma.com/design/kkFWpGQRaCsQIJFRXwe13S/Untitled?node-id=0-1&t=pg2DZCoD0XhF4Tjb-1
 
-![img_1.png](img_1.png)
+![img_1.png](Imgs/img_1.png)
 
-![img_2.png](img_2.png)
+![img_2.png](Imgs/img_2.png)
 
 
 # 2. Funcionalidades
@@ -73,7 +73,7 @@ Cambios y nuevas modificaciones en el proyecto TO-DO-CVDS:
 
 ## Estructura del proyecto
 
-![img_3.png](img_3.png)
+![img_3.png](Imgs/img_3.png)
 
 Se han realizado las siguientes adiciones al proyecto con el fin de mejorar su funcionalidad:
 
@@ -85,33 +85,33 @@ Fecha Inicial: Este campo permitirá registrar la fecha de inicio de cada tarea,
 
 Fecha Estimada: Se ha agregado un campo donde los usuarios podrán ingresar una fecha estimada de finalización, ayudando a prever tiempos y a planificar las tareas de manera más eficiente.
 
-![img_4.png](img_4.png)
+![img_4.png](Imgs/img_4.png)
 
 ### Pestaña del boton de "Crear Tarea"
 
-![img_5.png](img_5.png)
+![img_5.png](Imgs/img_5.png)
 
 ### Página de análisis de la tarea
 
 #### Histograma de dificultad
 
-![img_6.png](img_6.png)
+![img_6.png](Imgs/img_6.png)
 
 #### Gráfica de Numero de tareas completadas a lo largo del tiempo.
-![img_7.png](img_7.png)
+![img_7.png](Imgs/img_7.png)
 
 #### Gráfica de tiempo estimado promedio por prioridad de tarea.
-![img_8.png](img_8.png)
+![img_8.png](Imgs/img_8.png)
 
 #### Gráfica de tiempo total dedicado a las tareas completadas a lo largo del tiempo.
-![img_9.png](img_9.png)
+![img_9.png](Imgs/img_9.png)
 
 ### Pestaña editar tarea
 
-![img_10.png](img_10.png)
+![img_10.png](Imgs/img_10.png)
 
 ### Funcionalidad boton tarea realizada o tarea no realizada.
 
-![img_11.png](img_11.png)
+![img_11.png](Imgs/img_11.png)
 
-![img_12.png](img_12.png)
+![img_12.png](Imgs/img_12.png)
