@@ -3,7 +3,7 @@ import styles from'../../assets/styles/register.module.css'
 import {useState} from "react";
 import Swal from "sweetalert2";
 import {UserService} from "../../services/UserService";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 function Register(){
     const navigate = useNavigate();
@@ -41,10 +41,6 @@ function Register(){
                 text: error.message,
             });
         }
-    }
-
-    const navigateToLogin = () => {
-        navigate('/login');
     }
 
     return (
@@ -107,10 +103,7 @@ function Register(){
                 </form>
                 <p className={styles["register-link"]}>
                     You have an account?
-                    <a
-                    onClick={navigateToLogin}
-                    style={{cursor: 'pointer'}}
-                > Login</a>
+                    <Link to="/login" style={{cursor: 'pointer'}}> Login</Link>
                 </p>
             </div>
         </div>
