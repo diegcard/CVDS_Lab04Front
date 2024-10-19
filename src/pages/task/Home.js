@@ -18,8 +18,19 @@ function Home() {
     useEffect(() => {
         setUsername(AuthService.getFullName());
         setUserId(AuthService.getId());
-        fetchTasks();
     }, []);
+
+    useEffect(() => {
+        const fetchTasks = async () => {
+            if (userId) {
+                const data = await UserService.fetchTasksByUserId(userId);
+                console.log(data);
+                setTasks(data);
+            }
+        };
+
+        fetchTasks();
+    }, [userId]);
 
     const fetchTasks = async () => {
         if (userId) { // Asegúrate de que userId esté disponible
