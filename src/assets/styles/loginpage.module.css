@@ -140,3 +140,10 @@ body, html {
 .register-link a:hover {
     text-decoration: underline;
 }
+
+.error-message {
+    color: #ffffff;
+    font-size: 0.875rem;
+    margin-top: 1rem;
+    text-align: center;
+}
