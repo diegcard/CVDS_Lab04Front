@@ -36,6 +36,7 @@ function Home() {
 
     const handleDone = (taskId) => {
         // TODO implement done task
+        console.log('Done task', taskId);
     };
 
     const handleDelete = async (taskId) => {
@@ -124,7 +125,10 @@ function Home() {
                             <td className={styles["tableCell"]}>{task.difficultyLevel}</td>
                             <td className={styles["tableCell"]}>{task.priority}</td>
                             <td className={styles["tableCell"]}>
-                                <button className={styles["done"]}>Done</button>
+                                <button
+                                    className={styles["done"]}
+                                    onClick={() => handleDone(task.id)}
+                                >Done</button>
                                 <button
                                     className={styles["delete"]}
                                     onClick={() => handleDelete(task.id)}

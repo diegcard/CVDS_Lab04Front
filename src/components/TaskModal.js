@@ -5,8 +5,6 @@ import {TaskService} from "../services/TaskService";
 import Swal from "sweetalert2";
 
 const TaskModal = ({onClose, onSuccess }) => {
-    const [error, setError] = useState('');
-    const [userId, setUserId] = useState('');
     const [form, setForm] = useState({
         id: '',
         nameTask: '',
@@ -23,15 +21,12 @@ const TaskModal = ({onClose, onSuccess }) => {
     useEffect(() => {
         const userId = AuthService.getId();
         if (userId) {
-            setUserId(userId);
-            setForm({
-                ...form,
+            setForm(prevForm => ({
+                ...prevForm,
                 user: userId,
-            });
+            }));
         }
     }, []);
-
-
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -132,7 +127,6 @@ const TaskModal = ({onClose, onSuccess }) => {
                         />
                     </div>
 
-                    {error && <div className="error-message">{error}</div>}
 
                     <div className="form-group">
                         <label htmlFor="description">Description:</label>
