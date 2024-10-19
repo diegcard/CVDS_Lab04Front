@@ -1,30 +1,97 @@
-import React, { useEffect, useState } from 'react';
-import { AuthService } from "../../services/AuthService";
-import { useNavigate } from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import {AuthService} from "../../services/AuthService";
+import {useNavigate} from "react-router-dom";
 import styles from '../../assets/styles/home.module.css';
+import {UserService} from "../../services/UserService";
+import {Dialog} from "primereact/dialog";
+import TaskModal from "../../components/TaskModal";
+import {TaskService} from "../../services/TaskService";
+import Swal from "sweetalert2";
 
 function Home() {
     const [username, setUsername] = useState('');
     const navigate = useNavigate();
+    const [tasks, setTasks] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [userId, setUserId] = useState('');
+
 
     useEffect(() => {
-        const currentUsername = AuthService.getFullName();
-        if (currentUsername) {
-            setUsername(currentUsername);
-        }
+        setUsername(AuthService.getFullName());
+        setUserId(AuthService.getId());
+        fetchTasks();
     }, []);
+
+    const fetchTasks = async () => {
+        const data = await UserService.fetchTasksByUserId(userId);
+        setTasks(data);
+    }
 
     const handleLogout = async () => {
         await AuthService.logout();
         navigate('/login');
     }
 
+    const handleDone = (taskId) => {
+        //TODO implement done task
+    }
+
+    const handleDelete = (taskId) => {
+        try {
+            TaskService.deteteTask(taskId);
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Task deleted successfully",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            fetchTasks();
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while deleting the task',
+            });
+        }
+    }
+
+
+    const handleCreate = () => {
+        setShowModal(true);
+    }
+
+
     return (
         <div className={styles["container"]}>
             <h1 className={styles["title"]}>CVDS TO-DO</h1>
             <div className={styles["buttonContainer"]}>
                 <div className={styles["leftButtons"]}>
-                    <button className={styles["button"]}>Create</button>
+
+                    <Dialog
+                        visible={showModal}
+                        style={{width: '50vw'}}
+                        modal
+                        onHide={() => setShowModal(false)}
+                        closeOnEscape={false}
+                        dismissableMask={false}
+                    >
+                        <TaskModal
+                            onClose={() => setShowModal(false)}
+                            onSuccess={() => {
+                                fetchTasks();
+                                setShowModal(false);
+                            }}
+                        />
+                    </Dialog>
+
+                    <button
+                        className={styles["button"]}
+                        onClick={handleCreate}
+                    >Create
+                    </button>
+
+
                     <button className={styles["button"]}>Analytics</button>
                 </div>
                 <div className={styles["userDetails"]}>
@@ -32,7 +99,8 @@ function Home() {
                     <button
                         className={styles["button"]}
                         onClick={handleLogout}
-                    >Logout</button>
+                    >Logout
+                    </button>
                 </div>
             </div>
             <div>
@@ -48,22 +116,28 @@ function Home() {
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td className={styles["tableCell"]}>Tarea 7</td>
-                        <td className={styles["tableCell"]}>Tender cama</td>
-                        <td className={styles["tableCell"]}>10/11/2024</td>
-                        <td className={styles["tableCell"]}>Low</td>
-                        <td className={styles["tableCell"]}>2</td>
-                        <td className={styles["tableCell"]}>
-                            <button className={styles["done"]}>Done</button>
-                            <button className={styles["delete"]}>Delete</button>
-                        </td>
-                    </tr>
+                    {tasks.map((task) => (
+                        <tr key={task.id}>
+                            <td className={styles["tableCell"]}>{task.nameTask}</td>
+                            <td className={styles["tableCell"]}>{task.descriptionTask}</td>
+                            <td className={styles["tableCell"]}>{task.estimatedTime}</td>
+                            <td className={styles["tableCell"]}>{task.difficultyLevel}</td>
+                            <td className={styles["tableCell"]}>{task.priority}</td>
+                            <td className={styles["tableCell"]}>
+                                <button className={styles["done"]}>Done</button>
+                                <button
+                                    className={styles["delete"]}
+                                    onClick={() => handleDelete(task.id)}
+                                >Delete</button>
+                            </td>
+                        </tr>
+                    ))}
                     </tbody>
                 </table>
             </div>
         </div>
     );
 }
+
 
 export default Home;

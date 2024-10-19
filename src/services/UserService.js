@@ -1,4 +1,10 @@
+import axios from "axios";
 import {API_BASE_URL} from "../config/globals";
+
+const axiosInstance = axios.create({
+    baseURL: API_BASE_URL,
+});
+
 
 export const UserService = {
 
@@ -16,5 +22,19 @@ export const UserService = {
             throw error;
         }
     },
+
+    fetchTasksByUserId: async (userId) => {
+        try {
+            const response = await axiosInstance.get(`${API_BASE_URL}/users/getTasks/${userId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
 
 };

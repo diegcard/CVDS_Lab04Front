@@ -35,6 +35,11 @@ export const AuthService = {
         return null;
     },
 
+    getId: () => {
+        const decodedToken = AuthService.getDecodedToken();
+        return decodedToken ? decodedToken.id : null;
+    },
+
     getUsername: () => {
         const decodedToken = AuthService.getDecodedToken();
         return decodedToken ? decodedToken.username : null;
