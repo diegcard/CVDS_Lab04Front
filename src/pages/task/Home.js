@@ -19,7 +19,7 @@ function Home() {
         setUsername(AuthService.getFullName());
         setUserId(AuthService.getId());
         fetchTasks();
-    }, [userId]); // Agregar userId como dependencia
+    }, []);
 
     const fetchTasks = async () => {
         if (userId) { // Asegúrate de que userId esté disponible
