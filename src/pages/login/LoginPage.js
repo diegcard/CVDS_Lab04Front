@@ -34,7 +34,7 @@ function LoginPage(){
             if (response.ok) {
                 const token = await response.text();
                 document.cookie = `authToken=${token}; path=/;`;
-                navigate('/dashboard');
+                navigate('/home');
             } else {
                 const errorMessage = await response.text();
                 setError(errorMessage);
