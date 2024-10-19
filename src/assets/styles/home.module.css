@@ -1,0 +1,87 @@
+.container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.title {
+    background-color: #9333ea;
+    color: white;
+    padding: 15px;
+    margin: -20px -20px 20px -20px;
+    border-radius: 8px 8px 0 0;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.leftButtons {
+    display: flex;
+}
+
+.userDetails {
+    display: flex;
+    align-items: center;
+}
+
+.userDetails span {
+    margin-right: 10px;
+}
+
+.button {
+    background-color: #9333ea;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tableCell {
+    text-align: left;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.tableHeader {
+    composes: tableCell;
+    background-color: #9333ea;
+    color: white;
+}
+
+.actionButton {
+    padding: 5px 10px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.done {
+    composes: actionButton;
+    background-color: #34a853;
+    color: white;
+}
+
+.undone {
+    composes: actionButton;
+    background-color: #4285f4;
+    color: white;
+}
+
+.delete {
+    composes: actionButton;
+    background-color: #ea4335;
+    color: white;
+}
