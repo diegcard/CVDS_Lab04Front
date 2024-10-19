@@ -5,10 +5,24 @@ const axiosInstance = axios.create({
     baseURL: API_BASE_URL,
 });
 
+const getAuthHeaders = () => {
+    const token = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('authToken='))
+        ?.split('=')[1];
+
+    return {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        }
+    };
+}
+
 export const TaskService = {
     createTask: async (task) => {
         try {
-            const response = await axiosInstance.post(`${API_BASE_URL}/tasks/create`, task);
+            const response = await axiosInstance.post(`/tasks/create`, task, getAuthHeaders());
             return response.data;
         } catch (error) {
             throw error;
@@ -17,7 +31,7 @@ export const TaskService = {
 
     deteteTask: async (taskId) => {
         try {
-            const response = await axiosInstance.delete(`${API_BASE_URL}/tasks/delete/${taskId}`);
+            const response = await axiosInstance.delete(`/tasks/delete/${taskId}`, getAuthHeaders());
             return response.data;
         } catch (error) {
             throw error;

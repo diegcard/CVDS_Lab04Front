@@ -15,31 +15,33 @@ function Home() {
     const [showModal, setShowModal] = useState(false);
     const [userId, setUserId] = useState('');
 
-
     useEffect(() => {
         setUsername(AuthService.getFullName());
         setUserId(AuthService.getId());
         fetchTasks();
-    }, []);
+    }, [userId]); // Agregar userId como dependencia
 
     const fetchTasks = async () => {
-        const data = await UserService.fetchTasksByUserId(userId);
-        setTasks(data);
-    }
+        if (userId) { // Asegúrate de que userId esté disponible
+            const data = await UserService.fetchTasksByUserId(userId);
+            console.log(data);
+            setTasks(data);
+        }
+    };
 
     const handleLogout = async () => {
         await AuthService.logout();
         navigate('/login');
-    }
+    };
 
     const handleDone = (taskId) => {
-        //TODO implement done task
-    }
+        // TODO implement done task
+    };
 
-    const handleDelete = (taskId) => {
+    const handleDelete = async (taskId) => {
         try {
-            TaskService.deteteTask(taskId);
-            Swal.fire({
+            await TaskService.deteteTask(taskId);
+            await Swal.fire({
                 position: "top-end",
                 icon: "success",
                 title: "Task deleted successfully",
@@ -54,13 +56,11 @@ function Home() {
                 text: 'An error occurred while deleting the task',
             });
         }
-    }
-
+    };
 
     const handleCreate = () => {
         setShowModal(true);
-    }
-
+    };
 
     return (
         <div className={styles["container"]}>
