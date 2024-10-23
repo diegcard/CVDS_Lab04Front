@@ -36,5 +36,22 @@ export const TaskService = {
         } catch (error) {
             throw error;
         }
+    },
+
+    makeTaskCompleted: async (taskId) => {
+        try {
+            const response = await axiosInstance.patch(`/tasks/done/${taskId}`, {}, getAuthHeaders());
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+    makeTaskUnDone: async (taskId) => {
+        try {
+            const response = await axiosInstance.patch(`/tasks/undone/${taskId}`, {}, getAuthHeaders());
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
     }
 };
