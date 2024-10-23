@@ -46,8 +46,24 @@ function Home() {
     };
 
     const handleDone = (taskId) => {
-        // TODO implement done task
-        console.log('Done task', taskId);
+        try {
+            TaskService.makeTaskCompleted(taskId);
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Task marked as done",
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+            fetchTasks();
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while marking the task as done',
+            });
+        }
     };
 
     const handleDelete = async (taskId) => {
@@ -73,6 +89,43 @@ function Home() {
     const handleCreate = () => {
         setShowModal(true);
     };
+
+    const handleUnDone = (taskId) => {
+        try {
+            TaskService.makeTaskUnDone(taskId);
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Task marked as undone",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            fetchTasks();
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while marking the task as undone',
+            });
+        }
+    }
+
+    const templateButtons = (task) => (
+        <div>
+            <button
+                className={styles[task.isCompleted ? "undone" : "done"]}
+                onClick={() => task.isCompleted? handleUnDone(task.id) :handleDone(task.id)}
+            >
+                {task.isCompleted ? "UnDone" : "Done"}
+            </button>
+            <button
+                className={styles["delete"]}
+                onClick={() => handleDelete(task.id)}
+            >
+                Delete
+            </button>
+        </div>
+    );
 
     return (
         <div className={styles["container"]}>
@@ -136,14 +189,7 @@ function Home() {
                             <td className={styles["tableCell"]}>{task.difficultyLevel}</td>
                             <td className={styles["tableCell"]}>{task.priority}</td>
                             <td className={styles["tableCell"]}>
-                                <button
-                                    className={styles["done"]}
-                                    onClick={() => handleDone(task.id)}
-                                >Done</button>
-                                <button
-                                    className={styles["delete"]}
-                                    onClick={() => handleDelete(task.id)}
-                                >Delete</button>
+                                {templateButtons(task)}
                             </td>
                         </tr>
                     ))}
