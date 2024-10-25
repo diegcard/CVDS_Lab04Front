@@ -68,7 +68,7 @@ function Home() {
 
     const handleDelete = async (taskId) => {
         try {
-            await TaskService.deteteTask(taskId);
+            await TaskService.deleteTask(taskId);
             await Swal.fire({
                 position: "top-end",
                 icon: "success",

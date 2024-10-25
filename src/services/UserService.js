@@ -21,25 +21,12 @@ const getAuthHeaders = () => {
 
 export const UserService = {
     createUser: async (user) => {
-        /*try {
-            const response = await fetch(`${API_BASE_URL}/users/create`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(user),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.error || 'An error occurred');
-            }
-
-            return data;
+        try {
+            const response = await axiosInstance.post('/users/create', user);
+            return response.data;
         } catch (error) {
             throw error;
-        }*/
+        }
     },
 
     fetchTasksByUserId: async (userId) => {
