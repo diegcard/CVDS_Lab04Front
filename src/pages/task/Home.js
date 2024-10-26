@@ -90,6 +90,10 @@ function Home() {
         setShowModal(true);
     };
 
+    const handleAnalyticsClick = () => {
+        navigate('/analytics');
+    }
+
     const handleUnDone = (taskId) => {
         try {
             TaskService.makeTaskUnDone(taskId);
@@ -109,6 +113,7 @@ function Home() {
             });
         }
     }
+
 
     const templateButtons = (task) => (
         <div>
@@ -157,7 +162,7 @@ function Home() {
                     </button>
 
 
-                    <button className={styles["button"]}>Analytics</button>
+                    <button className={styles["button"]} onClick={handleAnalyticsClick} >Analytics</button>
                 </div>
                 <div className={styles["userDetails"]}>
                     <span>{username}</span>
