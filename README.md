@@ -9,7 +9,52 @@
 # Nombre del proyecto
 - **TO-DO-CVDS**
 
-Este repositorio contiene una aplicación web sencilla de lista de tareas desarrollada con HTML, CSS y JavaScript. Los usuarios pueden crear, visualizar y navegar por una lista de tareas. 
+La aplicación web de Gestión de Tareas permite a los usuarios organizar y administrar sus tareas de forma eficiente. Desarrollada con una arquitectura moderna y principios de diseño SOLID, asegura un código sólido, fácil de mantener y escalable. La plataforma cuenta con dos módulos principales: Usuarios y Tareas, donde los usuarios pueden crear una cuenta, acceder al sistema y gestionar sus listas de tareas pendientes.
+
+El backend se ha implementado con Spring Boot y el proyecto se gestiona mediante Maven para facilitar su configuración y administración. 
+
+El frontend está desarrollado con React, proporcionando una interfaz de usuario interactiva y fácil de usar.
+
+### Características Principales: 
+
+1. Gestión de Usuarios:
+
+ Registro y autenticación de usuarios.
+
+Inicio de sesión con validación de credenciales.
+
+Crear, editar, eliminar y ver tareas. 
+
+Asignación de prioridades y fechas inicio y fin . 
+
+Visualización de tareas pendientes y completadas. 
+
+### Tecnologías y Herramientas Utilizadas: 
+
+Frontend:
+
+React: Framework para el desarrollo de la interfaz de usuario, permitiendo una experiencia dinámica e interactiva. 
+
+Integración Continua / Despliegue Continuo (CI/CD):
+
+Azure DevOps: Plataforma usada para la planeación y gestión del proyecto, por medio de la metodología Scrum.
+
+Tests automatizados: Implementación de pruebas unitarias y de integración, garantizando la calidad del código.
+
+Infraestructura y Despliegue:
+
+Azure Web App: Plataforma en la nube donde la aplicación es desplegada y alojada. 
+
+
+Sección de Usuarios:
+
+Creación de tareas con descripciones, fechas y prioridades. Posibilidad de marcar tareas como completadas o pendientes. Visualización clara de las tareas en una lista ordenada por prioridad o fecha de vencimiento. 
+Flujo de Trabajo: Registro e Inicio de Sesión: Los usuarios se registran proporcionando un nombre de usuario y contraseña. 
+Una vez autenticados, pueden acceder a su perfil y gestionar sus tareas.
+
+Gestión de Tareas: Los usuarios pueden crear nuevas tareas, asignarles una prioridad y actualizarlas según sea necesario. Además, las tareas se pueden marcar como completadas o eliminadas.
+
+
 
 # 1. MockUp del proyecto
 
@@ -27,41 +72,40 @@ https://www.figma.com/design/kkFWpGQRaCsQIJFRXwe13S/Untitled?node-id=0-1&t=pg2DZ
 
 - **Creación de tareas: Los usuarios pueden agregar nuevas tareas con un nombre y una descripción a través de un formulario.**
 - **Listado de tareas: Todas las tareas creadas se muestran en formato de tabla con soporte para paginación.**
-- **Acciones: Espacio reservado para futuras funcionalidades de gestión de tareas (como marcar como completada y eliminar).**
+- **Edición de tareas: Los usuarios pueden editar el nombre y la descripción de una tarea existente.**
+- **Eliminación de tareas: Los usuarios pueden eliminar una tarea de la lista.**
+- **Marcar como completada: Los usuarios pueden marcar una tarea como completada.**
+- **Marcar como incompleta: Los usuarios pueden marcar una tarea como incompleta.**
+- 
 
 # 3. Estructura del proyecto
 
+![img_6.png](Images/img_6.png)
 
-├── index.html         
+# 4. Desarrollo
 
-Estructura principal del HTML
+## 4.1. Login
 
-├── styles.css         
+![img_7.png](Images/img_7.png)
 
-Estilos para la aplicación
+Al iniciar sesión se realizan validaciones de las credenciales
 
-└── script.js          
+![img_9.png](Images/img_9.png)
 
-JavaScript para manejar la gestión dinámica de tareas
 
-# 4. Descripción de los archivos
+## 4.2. Registro
 
-## index.html
-El contenedor principal tiene dos vistas:
+![img_8.png](Images/img_8.png)
 
-- Vista de creación: Un formulario para crear nuevas tareas, al hacer clic en el botón "Crear".
-- Tabla: En la vista principal, una tabla lista todas las tareas, incluyendo estado de la tarea, nombre de la tarea, descripción y acciones.
+## 4.3. Pantalla principal
 
-## styles.css
+![img_10.png](Images/img_10.png)
 
-- Diseño responsive: Asegura que la aplicación web se adapte a diferentes tamaños de pantalla.
-- Estilos básicos: Proporciona un aspecto limpio y sencillo para la tabla, botones y formularios.
+## 4.4. Creación de tareas
 
-## script.js
-Este archivo manejará el comportamiento dinámico de la aplicación web:
+![img_11.png](Images/img_11.png)
 
-- Creación de tareas: Captura los datos introducidos por el usuario en el formulario de creación de tareas y actualiza la lista de tareas dinámicamente.
-- Eliminación de tareas: Elimina una tarea de la lista al hacer clic en el botón "Eliminar".
-- Marcar como completada: Cambia el estado de una tarea a "completada" al hacer clic en el botón "Completar".
-- Marcar como incompleta: Cambia el estado de una tarea a "incompleta" al hacer clic en el botón "Incompleta".
+
+
+
 
