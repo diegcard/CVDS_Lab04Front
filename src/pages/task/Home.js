@@ -7,6 +7,8 @@ import {Dialog} from "primereact/dialog";
 import TaskModal from "../../components/TaskModal";
 import {TaskService} from "../../services/TaskService";
 import Swal from "sweetalert2";
+import {Button} from "primereact/button";
+import 'primeicons/primeicons.css';
 
 function Home() {
     const [username, setUsername] = useState('');
@@ -87,12 +89,9 @@ function Home() {
     };
 
     const handleCreate = () => {
+        setSelectcedTask(null);
         setShowModal(true);
     };
-
-    const handleAnalyticsClick = () => {
-        navigate('/analytics');
-    }
 
     const handleUnDone = (taskId) => {
         try {
@@ -114,29 +113,46 @@ function Home() {
         }
     }
 
-
     const templateButtons = (task) => (
         <div>
             <button
                 className={styles[task.isCompleted ? "undone" : "done"]}
-                onClick={() => task.isCompleted? handleUnDone(task.id) :handleDone(task.id)}
+                onClick={() => task.isCompleted ? handleUnDone(task.id) : handleDone(task.id)}
             >
                 {task.isCompleted ? "UnDone" : "Done"}
             </button>
             <button
-                className={styles["delete"]}
+                className={styles.delete}
                 onClick={() => handleDelete(task.id)}
             >
                 Delete
             </button>
+            <div>
+                <Button
+                    icon="pi pi-pencil"
+                    label="Edit"
+                    className={styles.edit}
+                    onClick={() => {
+                        handleEdit(task);
+                    }}
+                />
+            </div>
         </div>
+
     );
 
+    const [selectcedTask, setSelectcedTask] = useState(null);
+
+    const handleEdit = (task) => {
+        setSelectcedTask(task);
+        setShowModal(true);
+    }
+
     return (
-        <div className={styles["container"]}>
-            <h1 className={styles["title"]}>CVDS TO-DO</h1>
-            <div className={styles["buttonContainer"]}>
-                <div className={styles["leftButtons"]}>
+        <div className={styles.container}>
+            <h1 className={styles.title}>CVDS TO-DO</h1>
+            <div className={styles.buttonContainer}>
+                <div className={styles.leftButtons}>
 
                     <Dialog
                         visible={showModal}
@@ -151,38 +167,40 @@ function Home() {
                             onSuccess={() => {
                                 fetchTasks();
                                 setShowModal(false);
+
                             }}
+                            taskToEdit={selectcedTask}
                         />
                     </Dialog>
 
                     <button
-                        className={styles["button"]}
+                        className={styles.button}
                         onClick={handleCreate}
                     >Create
                     </button>
 
 
-                    <button className={styles["button"]} onClick={handleAnalyticsClick} >Analytics</button>
+                    <button className={styles.button}>Analytics</button>
                 </div>
-                <div className={styles["userDetails"]}>
+                <div className={styles.userDetails}>
                     <span>{username}</span>
                     <button
-                        className={styles["button"]}
+                        className={styles.button}
                         onClick={handleLogout}
                     >Logout
                     </button>
                 </div>
             </div>
             <div>
-                <table className={styles["table"]}>
+                <table className={styles.table}>
                     <thead>
                     <tr>
-                        <th className={styles["tableHeader"]}>Task Name</th>
-                        <th className={styles["tableHeader"]}>Description</th>
-                        <th className={styles["tableHeader"]}>Estimated Time</th>
-                        <th className={styles["tableHeader"]}>Difficulty</th>
-                        <th className={styles["tableHeader"]}>Priority</th>
-                        <th className={styles["tableHeader"]}>Actions</th>
+                        <th className={styles.tableHeader}>Task Name</th>
+                        <th className={styles.tableHeader}>Description</th>
+                        <th className={styles.tableHeader}>Estimated Time</th>
+                        <th className={styles.tableHeader}>Difficulty</th>
+                        <th className={styles.tableHeader}>Priority</th>
+                        <th className={styles.tableHeader}>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -204,6 +222,5 @@ function Home() {
         </div>
     );
 }
-
 
 export default Home;
