@@ -174,6 +174,8 @@ const Analytics = () => {
           ['May', 500],
         ]);
 
+        
+
         const chart = new googleCharts.LineChart(container);
         chart.draw(data, {
           ...commonOptions,
