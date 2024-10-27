@@ -62,5 +62,9 @@ export const AuthService = {
 
     isAuthenticated: () => {
         return !!Cookies.get('token');
+    },
+
+    getRole: () => {
+        return AuthService.getDecodedToken().role;
     }
 };
