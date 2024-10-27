@@ -1,14 +1,20 @@
-import React, {useEffect, useState} from 'react';
-import {AuthService} from "../../services/AuthService";
-import {useNavigate} from "react-router-dom";
+import React, { useEffect, useState, useCallback } from 'react';
+import { AuthService } from "../../services/AuthService";
+import { useNavigate } from "react-router-dom";
 import styles from '../../assets/styles/home.module.css';
-import {UserService} from "../../services/UserService";
-import {Dialog} from "primereact/dialog";
+import { UserService } from "../../services/UserService";
+import { Dialog } from "primereact/dialog";
 import TaskModal from "../../components/TaskModal";
-import {TaskService} from "../../services/TaskService";
+import { TaskService } from "../../services/TaskService";
 import Swal from "sweetalert2";
-import {Button} from "primereact/button";
-import 'primeicons/primeicons.css';
+import { Button } from "primereact/button";
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { InputText } from "primereact/inputtext";
+import { Tag } from "primereact/tag";
+import stylesList from '../../assets/styles/TaskList.module.css';
+import 'primereact/resources/themes/saga-blue/theme.css';
+
 
 function Home() {
     const [username, setUsername] = useState('');
@@ -16,6 +22,8 @@ function Home() {
     const [tasks, setTasks] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [userId, setUserId] = useState('');
+    const [globalFilter, setGlobalFilter] = useState(''); // Filtro global para buscar
+    const [selectedTask, setSelectedTask] = useState(null);
 
     useEffect(() => {
         setUsername(AuthService.getFullName());
@@ -23,224 +31,136 @@ function Home() {
     }, []);
 
     useEffect(() => {
-        const fetchTasks = async () => {
-            if (userId) {
-                const data = await UserService.fetchTasksByUserId(userId);
-                console.log(data);
-                setTasks(data);
-            }
-        };
-
-        fetchTasks();
+        if (userId) fetchTasks();
     }, [userId]);
 
     const fetchTasks = async () => {
-        if (userId) { 
+        if (userId) {
             const data = await UserService.fetchTasksByUserId(userId);
-            console.log(data);
             setTasks(data);
         }
     };
 
-    const handleLogout = async () => {
+    const handleLogout = () => {
         AuthService.logout();
         navigate('/login');
     };
 
-    const handleDone = (taskId) => {
+    const handleDone = async (taskId) => {
         try {
-            TaskService.makeTaskCompleted(taskId);
-            Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "Task marked as done",
-                showConfirmButton: false,
-                timer: 1500
-            });
-
+            await TaskService.makeTaskCompleted(taskId);
+            Swal.fire({ icon: "success", title: "Task marked as done", timer: 1500, position: "top-end", showConfirmButton: false });
             fetchTasks();
         } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'An error occurred while marking the task as done',
-            });
+            Swal.fire({ icon: 'error', title: 'Error', text: 'Error marking task as done' });
         }
     };
 
     const handleDelete = async (taskId) => {
         try {
             await TaskService.deleteTask(taskId);
-            await Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "Task deleted successfully",
-                showConfirmButton: false,
-                timer: 1500
-            });
+            Swal.fire({ icon: "success", title: "Task deleted", timer: 1500, position: "top-end", showConfirmButton: false });
             fetchTasks();
         } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'An error occurred while deleting the task',
-            });
+            Swal.fire({ icon: 'error', title: 'Error', text: 'Error deleting task' });
         }
     };
 
-    const handleCreate = () => {
-        setSelectcedTask(null);
-        setShowModal(true);
+    const handleUnDone = async (taskId) => {
+        try {
+            await TaskService.makeTaskUnDone(taskId);
+            Swal.fire({ icon: "success", title: "Task marked as undone", timer: 1500, position: "top-end", showConfirmButton: false });
+            fetchTasks();
+        } catch (error) {
+            Swal.fire({ icon: 'error', title: 'Error', text: 'Error marking task as undone' });
+        }
     };
-
-    const handleUnDone = (taskId) => {
-        try {
-            TaskService.makeTaskUnDone(taskId);
-            Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "Task marked as undone",
-                showConfirmButton: false,
-                timer: 1500
-            });
-            fetchTasks();
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'An error occurred while marking the task as undone',
-            });
-        }
-    }
-
-    const handleGenerateAleatoryTask = async () => {
-        try {
-            await TaskService.createAleatoryTask();
-            await Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "Tasks created successfully",
-                showConfirmButton: false,
-                timer: 1500
-            });
-            fetchTasks();
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'An error occurred while creating the task',
-            });
-        }
-    }
-
-    const templateButtons = (task) => (
-        <div>
-            <button
-                className={styles[task.isCompleted ? "undone" : "done"]}
-                onClick={() => task.isCompleted ? handleUnDone(task.id) : handleDone(task.id)}
-            >
-                {task.isCompleted ? "UnDone" : "Done"}
-            </button>
-            <button
-                className={styles.delete}
-                onClick={() => handleDelete(task.id)}
-            >
-                Delete
-            </button>
-            <div>
-                <Button
-                    icon="pi pi-pencil"
-                    label="Edit"
-                    className={styles.edit}
-                    onClick={() => {
-                        handleEdit(task);
-                    }}
-                />
-            </div>
-        </div>
-
-    );
-
-    const [selectcedTask, setSelectcedTask] = useState(null);
 
     const handleEdit = (task) => {
-        setSelectcedTask(task);
+        setSelectedTask(task);
         setShowModal(true);
-    }
+    };
+
+    const handleAnalyticsClick = () => {
+        navigate('/analytics');
+    };
+
+    const renderHeader = () => (
+        <div className="table-header">
+            <h2 className={styles.title}>CVDS TO-DO</h2>
+            <span className="p-input-icon-left">
+                <i className="pi pi-search" />
+                <InputText
+                    type="search"
+                    value={globalFilter}
+                    onChange={(e) => setGlobalFilter(e.target.value)}
+                    placeholder="Search tasks..."
+                    style={{ margin: '1.5rem' }}
+                />
+            </span>
+        </div>
+    );
+
+    const actionBodyTemplate = (task) => (
+        <div className="flex gap-2">
+            <Button
+                label={task.isCompleted ? "UnDone" : "Done"}
+                className={task.isCompleted ? styles.undone : styles.done}
+                onClick={() => task.isCompleted ? handleUnDone(task.id) : handleDone(task.id)}
+            />
+            <Button label="Delete" className={styles.delete} onClick={() => handleDelete(task.id)} />
+            <Button icon="pi pi-pencil" label="Edit" className={styles.edit} onClick={() => handleEdit(task)} />
+        </div>
+    );
+
+    const statusBodyTemplate = (task) => (
+        <Tag
+            value={task.isCompleted ? "Completed" : "Pending"}
+            severity={task.isCompleted ? "success" : "warning"}
+        />
+    );
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>CVDS TO-DO</h1>
             <div className={styles.buttonContainer}>
                 <div className={styles.leftButtons}>
-
-                    <Dialog
-                        visible={showModal}
-                        style={{width: '50vw'}}
-                        modal
-                        onHide={() => setShowModal(false)}
-                        closeOnEscape={false}
-                        dismissableMask={false}
-                    >
-                        <TaskModal
-                            onClose={() => setShowModal(false)}
-                            onSuccess={() => {
-                                fetchTasks();
-                                setShowModal(false);
-
-                            }}
-                            taskToEdit={selectcedTask}
-                        />
+                    <Dialog visible={showModal} style={{ width: '50vw' }} modal onHide={() => setShowModal(false)}>
+                        <TaskModal onClose={() => setShowModal(false)} onSuccess={fetchTasks} taskToEdit={selectedTask} />
                     </Dialog>
-
-                    <button
-                        className={styles.button}
-                        onClick={handleCreate}
-                    >Create
-                    </button>
-
-
-                    <button className={styles["button"]} onClick={handleAnalyticsClick} >Analytics</button>
-
-                    <button className={styles["button"]} onClick={handleGenerateAleatoryTask} >Create aleatory task</button>
-                    <button className={styles.button}>Analytics</button>
+                    <Button label="Create" onClick={() => setShowModal(true)} className={styles.button} />
+                    {AuthService.getRole() === 'ADMIN' && (
+                        <>
+                            <Button label="Analytics" onClick={handleAnalyticsClick} className={styles.button} />
+                            <Button label="Create Aleatory Task" onClick={fetchTasks} className={styles.button} />
+                        </>
+                    )}
                 </div>
                 <div className={styles.userDetails}>
                     <span>{username}</span>
-                    <button
-                        className={styles.button}
-                        onClick={handleLogout}
-                    >Logout
-                    </button>
+                    <Button label="Logout" onClick={handleLogout} className={styles.button} />
                 </div>
             </div>
-            <div>
-                <table className={styles.table}>
-                    <thead>
-                    <tr>
-                        <th className={styles.tableHeader}>Task Name</th>
-                        <th className={styles.tableHeader}>Description</th>
-                        <th className={styles.tableHeader}>Estimated Time</th>
-                        <th className={styles.tableHeader}>Difficulty</th>
-                        <th className={styles.tableHeader}>Priority</th>
-                        <th className={styles.tableHeader}>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {tasks.map((task) => (
-                        <tr key={task.id}>
-                            <td className={styles["tableCell"]}>{task.nameTask}</td>
-                            <td className={styles["tableCell"]}>{task.descriptionTask}</td>
-                            <td className={styles["tableCell"]}>{task.estimatedTime}</td>
-                            <td className={styles["tableCell"]}>{task.difficultyLevel}</td>
-                            <td className={styles["tableCell"]}>{task.priority}</td>
-                            <td className={styles["tableCell"]}>
-                                {templateButtons(task)}
-                            </td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
+            <div className={stylesList.tableContainer}>
+                <DataTable
+                    value={tasks}
+                    paginator
+                    rows={15}
+                    rowsPerPageOptions={[5, 10, 25, 50]}
+                    header={renderHeader()}
+                    globalFilter={globalFilter}
+                    emptyMessage="No tasks found."
+                    className="p-datatable-sm"
+                    showGridlines
+                    stripedRows
+                >
+                    <Column field="nameTask" header="Task Name" />
+                    <Column field="descriptionTask" header="Description" />
+                    <Column field="estimatedTime" header="Estimated Time" />
+                    <Column field="difficultyLevel" header="Difficulty" />
+                    <Column field="priority" header="Priority" />
+                    <Column body={statusBodyTemplate} header="Status" />
+                    <Column body={actionBodyTemplate} header="Actions" style={{ minWidth: '12rem' }} />
+                </DataTable>
             </div>
         </div>
     );

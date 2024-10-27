@@ -108,6 +108,11 @@ export const TaskService = {
     createAleatoryTask: async () => {
         try {
             const response = await axiosInstance.post(`/tasks/generateRandomTasks`, getAuthHeaders());
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
 
 
     updateTask: async (form) => {
@@ -118,6 +123,4 @@ export const TaskService = {
             throw error;
         }
     },
-
-    }
 };

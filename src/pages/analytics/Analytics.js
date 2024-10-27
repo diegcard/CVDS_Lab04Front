@@ -3,9 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import '../../assets/styles/Analytics.css';
 import { API_BASE_URL } from '../../config/globals.js';
 
-
-
-
 const Analytics = () => {
   const [selectedChart, setSelectedChart] = useState(null);
   const [googleCharts, setGoogleCharts] = useState(null);
@@ -14,7 +11,7 @@ const Analytics = () => {
 
   const chartTypes = [
     'Difficulty Histogram',
-    'Priority Histogram',   
+    'Priority Histogram',
     'task compled',
     'Scatter Plot'
   ];
@@ -25,15 +22,15 @@ const Analytics = () => {
       const script = document.createElement('script');
       script.src = 'https://www.gstatic.com/charts/loader.js';
       script.async = true;
-      
+
       script.onload = () => {
-        window.google.charts.load('current', { 
+        window.google.charts.load('current', {
           packages: ['corechart']
         });
         window.google.charts.setOnLoadCallback(() => {
           setGoogleCharts(window.google.visualization);
         });
-      };      
+      };
       document.body.appendChild(script);
 
       return () => {
@@ -46,7 +43,7 @@ const Analytics = () => {
 
   const fetchAndFilterTasks = async () => {
     try {
-      
+
       const response = await fetch(`${API_BASE_URL}/tasks/all`, {
         method: 'GET',
         headers: {
@@ -63,7 +60,7 @@ const Analytics = () => {
         if (task.difficultyLevel === 'medium') acc.medium += 1;
         if (task.difficultyLevel === 'high') acc.high += 1;
         console.log(acc);
-        
+
         return acc;
       }, { low: 0, medium: 0, high: 0 });
 
@@ -72,7 +69,6 @@ const Analytics = () => {
       console.error('Error fetching tasks:', error);
     }
   };
-
 
   const fetchTasksIsCompleted = async () => {
     try {
@@ -84,7 +80,7 @@ const Analytics = () => {
       });
 
       const tasks = await response.json();
-      
+
       const taskCompleted = tasks.reduce((acc, task) => {
         if (task.isCompleted) acc.completed += 1;
         if (!task.isCompleted) acc.notCompleted += 1;
@@ -124,7 +120,7 @@ const Analytics = () => {
   };
 
 
-  
+
 
 
   const renderChart = async () => {
@@ -163,7 +159,7 @@ const Analytics = () => {
     };
 
     switch (selectedChart) {
-      
+
       case 'Linae Chart': {
         const data = googleCharts.arrayToDataTable([
           ['Month', 'Value'],
@@ -282,8 +278,6 @@ const Analytics = () => {
               Back
             </button>
           </div>
-
-          {/* Main content */}
           <div className="flex-1 p-8">
             <div className="bg-white rounded-lg shadow-md p-6 h-full">
               <div id="chart-container" className="w-full h-full"></div>
