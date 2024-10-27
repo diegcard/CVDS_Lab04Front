@@ -108,10 +108,16 @@ export const TaskService = {
     createAleatoryTask: async () => {
         try {
             const response = await axiosInstance.post(`/tasks/generateRandomTasks`, getAuthHeaders());
+
+
+    updateTask: async (form) => {
+        try {
+            const response = await axiosInstance.patch(`/tasks/update`, form, getAuthHeaders());
             return response.data;
         } catch (error) {
             throw error;
         }
     },
 
+    }
 };
