@@ -123,4 +123,12 @@ export const TaskService = {
             throw error;
         }
     },
+    getAllTasks: async () => {
+        try {
+            const response = await axiosInstance.get(`/tasks/all`, getAuthHeaders());
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
 };
