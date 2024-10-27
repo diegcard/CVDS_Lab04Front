@@ -164,7 +164,7 @@ const Analytics = () => {
 
     switch (selectedChart) {
       
-      case 'Line Chart': {
+      case 'Linae Chart': {
         const data = googleCharts.arrayToDataTable([
           ['Month', 'Value'],
           ['Jan', 400],
@@ -174,7 +174,6 @@ const Analytics = () => {
           ['May', 500],
         ]);
 
-        
 
         const chart = new googleCharts.LineChart(container);
         chart.draw(data, {
