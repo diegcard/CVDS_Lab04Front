@@ -103,5 +103,15 @@ export const TaskService = {
         } catch (error) {
             throw error;
         }
+    },
+
+
+    updateTask: async (form) => {
+        try {
+            const response = await axiosInstance.patch(`/tasks/update`, form, getAuthHeaders());
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
     }
 };
