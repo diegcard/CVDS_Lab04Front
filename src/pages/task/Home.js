@@ -35,7 +35,7 @@ function Home() {
     }, [userId]);
 
     const fetchTasks = async () => {
-        if (userId) { // Asegúrate de que userId esté disponible
+        if (userId) { 
             const data = await UserService.fetchTasksByUserId(userId);
             console.log(data);
             setTasks(data);
@@ -43,7 +43,7 @@ function Home() {
     };
 
     const handleLogout = async () => {
-        await AuthService.logout();
+        AuthService.logout();
         navigate('/login');
     };
 
@@ -109,6 +109,26 @@ function Home() {
                 icon: 'error',
                 title: 'Error',
                 text: 'An error occurred while marking the task as undone',
+            });
+        }
+    }
+
+    const handleGenerateAleatoryTask = async () => {
+        try {
+            await TaskService.createAleatoryTask();
+            await Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Tasks created successfully",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            fetchTasks();
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while creating the task',
             });
         }
     }
@@ -180,6 +200,9 @@ function Home() {
                     </button>
 
 
+                    <button className={styles["button"]} onClick={handleAnalyticsClick} >Analytics</button>
+
+                    <button className={styles["button"]} onClick={handleGenerateAleatoryTask} >Create aleatory task</button>
                     <button className={styles.button}>Analytics</button>
                 </div>
                 <div className={styles.userDetails}>

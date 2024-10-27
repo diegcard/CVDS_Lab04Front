@@ -30,7 +30,7 @@ const getAuthHeaders = () => {
  * 
  * @namespace TaskService
  */
-export const TaskService = {     
+export const TaskService = {
     /**
      * Creates a new task.
      * 
@@ -104,6 +104,10 @@ export const TaskService = {
             throw error;
         }
     },
+    
+    createAleatoryTask: async () => {
+        try {
+            const response = await axiosInstance.post(`/tasks/generateRandomTasks`, getAuthHeaders());
 
 
     updateTask: async (form) => {
@@ -113,5 +117,7 @@ export const TaskService = {
         } catch (error) {
             throw error;
         }
+    },
+
     }
 };
