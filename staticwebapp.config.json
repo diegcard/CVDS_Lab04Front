@@ -1,0 +1,12 @@
+{
+  "routes": [
+    {
+      "route": "/login",
+      "methods": [
+        "post"
+      ],
+      "redirect": "/login",
+      "statusCode": 200
+    }
+  ]
+}
