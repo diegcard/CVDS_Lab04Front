@@ -229,7 +229,7 @@ const Analytics = () => {
         if (selectedChart && googleCharts) {
             renderChart();
         }
-    }, [selectedChart, googleCharts]);
+    }, [selectedChart, googleCharts, renderChart]);
 
     const handleBackClick = () => {
         navigate('/home');

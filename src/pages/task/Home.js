@@ -32,7 +32,7 @@ function Home() {
 
     useEffect(() => {
         if (userId) fetchTasks();
-    }, [userId]);
+    }, [userId, fetchTasks]);
 
     const fetchTasks = async () => {
         if (userId) {
