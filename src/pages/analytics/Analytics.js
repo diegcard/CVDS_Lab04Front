@@ -219,6 +219,9 @@ const Analytics = () => {
                 });
                 break;
             }
+
+            default:
+                break;
         }
     };
 

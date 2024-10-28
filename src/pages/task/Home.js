@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState} from 'react';
 import {AuthService} from "../../services/AuthService";
 import {useNavigate} from "react-router-dom";
 import styles from '../../assets/styles/home.module.css';
