@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/styles/Analytics.css';
 import { API_BASE_URL } from '../../config/globals.js';
-import { TaskService } from "../../services/TaskService";
 
 const Analytics = () => {
     const [selectedChart, setSelectedChart] = useState(null);
