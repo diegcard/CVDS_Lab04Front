@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/styles/Analytics.css';
 import { API_BASE_URL } from '../../config/globals.js';
@@ -110,7 +110,7 @@ const Analytics = () => {
         }
     };
 
-    const renderChart = async () => {
+    const renderChart = useCallback(async () => {
         if (!selectedChart || !googleCharts) {
             return (
                 <div className="flex items-center justify-center h-full text-gray-500">
@@ -223,7 +223,7 @@ const Analytics = () => {
             default:
                 break;
         }
-    };
+    }, [selectedChart, googleCharts, taskData, tasks]);
 
     useEffect(() => {
         if (selectedChart && googleCharts) {
@@ -252,17 +252,16 @@ const Analytics = () => {
                                 </button>
                             ))}
                         </div>
-                        <button
-                            onClick={handleBackClick}
-                            className="w-full py-2 px-4 rounded text-white transition-colors bg-red-500 hover:bg-red-600 mt-4"
-                        >
-                            Back
-                        </button>
                     </div>
-                    <div className="flex-1 p-8">
-                        <div className="bg-white rounded-lg shadow-md p-6 h-full">
-                            <div id="chart-container" className="w-full h-full"></div>
+
+                    <div className="flex-1 flex flex-col">
+                        <div className="flex justify-between items-center p-4 bg-gray-100 border-b border-gray-300">
+                            <h1 className="text-2xl font-bold">Analytics</h1>
+                            <button onClick={handleBackClick} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                                Back to Home
+                            </button>
                         </div>
+                        <div id="chart-container" className="flex-1 overflow-y-auto p-6 bg-white"></div>
                     </div>
                 </div>
             </div>
