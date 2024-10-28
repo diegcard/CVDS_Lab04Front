@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/styles/Analytics.css';
 import { API_BASE_URL } from '../../config/globals.js';
@@ -16,6 +16,7 @@ const Analytics = () => {
     });
     const [tasks, setTasks] = useState([]);
     const navigate = useNavigate();
+    const isDataFetched = useRef(false);
 
     const chartTypes = [
         'Difficulty Histogram',
@@ -44,9 +45,11 @@ const Analytics = () => {
         };
 
         initializeGoogleCharts();
-    }, [selectedChart]);
+    }, []); // Removida la dependencia selectedChart
 
-    const fetchAndFilterTasks = async () => {
+    const fetchAndFilterTasks = useCallback(async () => {
+        if (isDataFetched.current) return;
+
         try {
             const response = await fetch(`${API_BASE_URL}/tasks/all`, {
                 method: 'GET',
@@ -63,12 +66,15 @@ const Analytics = () => {
             }, { low: 0, medium: 0, high: 0 });
 
             setTaskData(prev => ({ ...prev, ...difficultyCounts }));
+            isDataFetched.current = true;
         } catch (error) {
             console.error('Error fetching tasks:', error);
         }
-    };
+    }, []);
 
-    const fetchTasksIsCompleted = async () => {
+    const fetchTasksIsCompleted = useCallback(async () => {
+        if (isDataFetched.current) return;
+
         try {
             const response = await fetch(`${API_BASE_URL}/tasks/all`, {
                 method: 'GET',
@@ -84,12 +90,15 @@ const Analytics = () => {
             }, { completed: 0, notCompleted: 0 });
 
             setTaskData(prev => ({ ...prev, ...taskCompletionCounts }));
+            isDataFetched.current = true;
         } catch (error) {
             console.error('Error fetching tasks:', error);
         }
-    };
+    }, []);
 
-    const fetchTasksByPriority = async () => {
+    const fetchTasksByPriority = useCallback(async () => {
+        if (isDataFetched.current) return;
+
         try {
             const response = await fetch(`${API_BASE_URL}/tasks/all`, {
                 method: 'GET',
@@ -105,26 +114,19 @@ const Analytics = () => {
             }, {1: 0, 2: 0, 3: 0, 4: 0, 5: 0});
 
             setTaskData(prev => ({ ...prev, priorities: priorityCounts }));
+            isDataFetched.current = true;
         } catch (error) {
             console.error('Error fetching tasks:', error);
         }
-    };
+    }, []);
 
-    const renderChart = useCallback(async () => {
+    const renderChart = useCallback(() => {
         if (!selectedChart || !googleCharts) {
             return (
                 <div className="flex items-center justify-center h-full text-gray-500">
                     {!selectedChart ? 'Select a chart type from the sidebar' : 'Loading charts...'}
                 </div>
             );
-        }
-
-        if (selectedChart === 'Difficulty Histogram') {
-            await fetchAndFilterTasks();
-        } else if (selectedChart === 'Task Completed') {
-            await fetchTasksIsCompleted();
-        } else if (selectedChart === 'Priority Histogram' || selectedChart === 'Scatter Plot') {
-            await fetchTasksByPriority();
         }
 
         const container = document.getElementById('chart-container');
@@ -190,7 +192,6 @@ const Analytics = () => {
 
             case 'Scatter Plot': {
                 const scatterData = tasks.map(task => {
-                    // Convert estimatedTime to hours for better visualization
                     const estimatedDate = new Date(task.estimatedTime);
                     const hours = estimatedDate.getHours() + (estimatedDate.getMinutes() / 60);
 
@@ -215,21 +216,39 @@ const Analytics = () => {
                         title: 'Estimated Time (hours)',
                         minValue: 0
                     },
-                    trendlines: { 0: {} }  // Adds a trend line
+                    trendlines: { 0: {} }
                 });
                 break;
             }
 
-            default:
+            default: {
+                console.warn('Unsupported chart type:', selectedChart);
                 break;
+            }
         }
     }, [selectedChart, googleCharts, taskData, tasks]);
 
+    // Efecto para cargar los datos cuando cambia el tipo de gráfico
     useEffect(() => {
         if (selectedChart && googleCharts) {
+            isDataFetched.current = false; // Resetear el flag cuando cambia el tipo de gráfico
+
+            if (selectedChart === 'Difficulty Histogram') {
+                fetchAndFilterTasks();
+            } else if (selectedChart === 'Task Completed') {
+                fetchTasksIsCompleted();
+            } else if (selectedChart === 'Priority Histogram' || selectedChart === 'Scatter Plot') {
+                fetchTasksByPriority();
+            }
+        }
+    }, [selectedChart, googleCharts, fetchAndFilterTasks, fetchTasksIsCompleted, fetchTasksByPriority]);
+
+    // Efecto para renderizar el gráfico cuando los datos están listos
+    useEffect(() => {
+        if (selectedChart && googleCharts && isDataFetched.current) {
             renderChart();
         }
-    }, [selectedChart, googleCharts, renderChart]);
+    }, [selectedChart, googleCharts, taskData, renderChart]);
 
     const handleBackClick = () => {
         navigate('/home');
@@ -245,23 +264,26 @@ const Analytics = () => {
                             {chartTypes.map((chartType) => (
                                 <button
                                     key={chartType}
-                                    onClick={() => setSelectedChart(chartType)}
+                                    onClick={() => {
+                                        setSelectedChart(chartType);
+                                    }}
                                     className={`w-full py-2 px-4 rounded text-white transition-colors ${selectedChart === chartType ? 'bg-blue-600' : 'bg-blue-500 hover:bg-blue-600'}`}
                                 >
                                     {chartType}
                                 </button>
                             ))}
                         </div>
+                        <button
+                            onClick={handleBackClick}
+                            className="w-full py-2 px-4 rounded text-white transition-colors bg-red-500 hover:bg-red-600 mt-4"
+                        >
+                            Back
+                        </button>
                     </div>
-
-                    <div className="flex-1 flex flex-col">
-                        <div className="flex justify-between items-center p-4 bg-gray-100 border-b border-gray-300">
-                            <h1 className="text-2xl font-bold">Analytics</h1>
-                            <button onClick={handleBackClick} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                                Back to Home
-                            </button>
+                    <div className="flex-1 p-8">
+                        <div className="bg-white rounded-lg shadow-md p-6 h-full">
+                            <div id="chart-container" className="w-full h-full"></div>
                         </div>
-                        <div id="chart-container" className="flex-1 overflow-y-auto p-6 bg-white"></div>
                     </div>
                 </div>
             </div>

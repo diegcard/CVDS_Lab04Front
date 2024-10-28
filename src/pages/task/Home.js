@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {AuthService} from "../../services/AuthService";
 import {useNavigate} from "react-router-dom";
 import styles from '../../assets/styles/home.module.css';
@@ -15,15 +15,21 @@ import {Tag} from "primereact/tag";
 import stylesList from '../../assets/styles/TaskList.module.css';
 import 'primereact/resources/themes/saga-blue/theme.css';
 
-
 function Home() {
     const [username, setUsername] = useState('');
     const navigate = useNavigate();
     const [tasks, setTasks] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [userId, setUserId] = useState('');
-    const [globalFilter, setGlobalFilter] = useState(''); // Filtro global para buscar
+    const [globalFilter, setGlobalFilter] = useState('');
     const [selectedTask, setSelectedTask] = useState(null);
+
+    const fetchTasks = useCallback(async () => {
+        if (userId) {
+            const data = await UserService.fetchTasksByUserId(userId);
+            setTasks(data);
+        }
+    }, [userId]);
 
     useEffect(() => {
         setUsername(AuthService.getFullName());
@@ -33,13 +39,6 @@ function Home() {
     useEffect(() => {
         if (userId) fetchTasks();
     }, [userId, fetchTasks]);
-
-    const fetchTasks = async () => {
-        if (userId) {
-            const data = await UserService.fetchTasksByUserId(userId);
-            setTasks(data);
-        }
-    };
 
     const createRandomTask = async () => {
         try {
